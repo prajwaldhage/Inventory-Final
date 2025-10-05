@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Credit Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; overflow: hidden; }
+        .table-container {
+            overflow: auto;
+            max-height: calc(100vh - 300px); /* Adjusted height */
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
+            background-color: #EDE9FE; /* Lighter purple */
+            font-weight: 600; color: #5B21B6; /* Darker purple text */
+            font-size: .875rem; text-transform: uppercase;
+            position: sticky; top: 0; z-index: 10;
+        }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div class="flex h-screen">
+    <aside class="w-64 bg-white p-6 flex flex-col justify-between">
+    </aside>
+
+    <main class="flex-1 flex flex-col p-6">
+        <div class="bg-white p-6 rounded-2xl shadow-sm h-full flex flex-col">
+            <div class="flex items-center justify-between relative mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Credit Report</h2>
+                <a href="{{ url_for('reports_hub') }}"
+                   class="flex items-center text-gray-600 font-semibold border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100">
+                    Back
+                </a>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <form method="GET" action="{{ url_for('credit_report') }}">
+                    <input type="text" name="search" placeholder="Search by customer name or ID..."
+                           value="{{ search_query or '' }}"
+                           class="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </form>
+            </div>
+
+            <div class="table-container flex-grow border rounded-lg">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <a href="{{ url_for('credit_report', search=search_query, sort_by='id', sort_order='ASC' if sort_by != 'id' or sort_order|upper == 'DESC' else 'DESC') }}">Customer
+                                ID</a></th>
+                        <th>
+                            <a href="{{ url_for('credit_report', search=search_query, sort_by='customer_name', sort_order='ASC' if sort_by != 'customer_name' or sort_order|upper == 'DESC' else 'DESC') }}">Customer
+                                Name</a></th>
+                        <th>
+                            <a href="{{ url_for('credit_report', search=search_query, sort_by='bill_amount', sort_order='ASC' if sort_by != 'bill_amount' or sort_order|upper == 'DESC' else 'DESC') }}">Total
+                                Amount</a></th>
+                        <th>
+                            <a href="{{ url_for('credit_report', search=search_query, sort_by='paid_amount', sort_order='ASC' if sort_by != 'paid_amount' or sort_order|upper == 'DESC' else 'DESC') }}">Paid
+                                Amount</a></th>
+                        <th>
+                            <a href="{{ url_for('credit_report', search=search_query, sort_by='unpaid_amount', sort_order='ASC' if sort_by != 'unpaid_amount' or sort_order|upper == 'DESC' else 'DESC') }}">Unpaid
+                                Amount</a></th>
+                    </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm">
+                    {% for customer in customers %}
+                    <tr class="hover:bg-gray-50">
+                        <td>#{{ customer.id }}</td>
+                        <td class="font-semibold">{{ customer.customer_name }}</td>
+                        <td>₹{{ "{:,.2f}".format(customer.bill_amount) }}</td>
+                        <td class="text-green-600">₹{{ "{:,.2f}".format(customer.paid_amount) }}</td>
+                        <td class="font-bold text-red-600">₹{{ "{:,.2f}".format(customer.unpaid_amount) }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500">No records found.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+                {% if total_pages > 1 %}
+                <div class="flex items-center space-x-2">
+                    {% if page > 1 %}<a
+                        href="{{ url_for('credit_report', page=page-1, search=search_query, sort_by=sort_by, sort_order=sort_order) }}"
+                        class="px-3 py-1 border rounded bg-white">◀</a>{% endif %}
+                    <span class="text-gray-700">Page {{ page }} / {{ total_pages }}</span>
+                    {% if page < total_pages %}<a
+                        href="{{ url_for('credit_report', page=page+1, search=search_query, sort_by=sort_by, sort_order=sort_order) }}"
+                        class="px-3 py-1 border rounded bg-white">▶</a>{% endif %}
+                </div>
+                {% endif %}
+
+                <a href="{{ url_for('credit_report_download', search=search_query, sort_by=sort_by, sort_order=sort_order) }}"
+                   class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2 shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                    Download
+                </a>
+            </div>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

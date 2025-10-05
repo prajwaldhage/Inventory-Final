@@ -170,6 +170,8 @@ def init_db(app):
 def index():
     """Default route redirects to the Inventory page."""
     return render_template('index.html')
+
+
 @app.route("/dashboard")
 def dashboard():
     data = {
@@ -180,11 +182,8 @@ def dashboard():
     return render_template('dashboard.html', **data)
 
 
-@app.route("/about")
-def about():
-    return render_template('about.html')
-
-
+@app.route('/report/report.html')
+@app.route('/about/about.html')
 @app.route('/setting/user.profile.html')
 def dummy_nav_links():
     return "Navigation Link Placeholder Page"
@@ -194,7 +193,7 @@ def dummy_nav_links():
 # === BILLING MODULE (app.py logic) ===
 # ====================================================================
 
-@app.route('/billing')  # Works!!!
+@app.route('/billing')
 def billing_page():
     return render_template('billing.html')
 
@@ -407,7 +406,7 @@ def process_bill_and_save():
 # === INVENTORY MODULE (harshit.py logic) ===
 # ====================================================================
 
-@app.route('/inventory')  # Works!!!
+@app.route('/inventory')
 def inventory_page():
     conn = get_db()
     # Removed the conn.close() from the finally block as get_db/close_db handle it via g.db/teardown
@@ -634,7 +633,7 @@ def get_categories():
 
 # --- Reports Routes (From harshit.py logic) ---
 
-@app.route('/reports/customer')  # Works!!!
+@app.route('/reports/customer')
 def customer_report():
     conn = get_db()
     if conn is None: abort(500)
@@ -674,7 +673,7 @@ def customer_report():
         pass
 
 
-@app.route('/reports/order_history')  # Not Working!!!
+@app.route('/reports/order_history')
 def order_history():
     conn = get_db()
     if conn is None: abort(500)
@@ -728,7 +727,7 @@ def order_history():
 
 
 # All other Report routes (credit, stock, downloads) need a valid 'reports.html' template
-@app.route('/reports')  # Works!!!
+@app.route('/reports')
 def reports_hub():
     # If this template is missing, routes like /reports/customer will fail.
     return render_template('reports.html')
@@ -760,4 +759,4 @@ if __name__ == '__main__':
     print(f"Starting server, using database '{DATABASE_FILE}'...")
     print("Access Billing at http://127.0.0.1:5001/billing")
     print("Access Inventory at http://127.0.0.1:5001/inventory")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
