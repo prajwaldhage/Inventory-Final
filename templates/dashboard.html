@@ -7,7 +7,6 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +30,7 @@
             <nav>
                 <ul>
                     <li class="mb-2">
-                        <a href="dashboard.html"
+                        <a href="{{url_for('dashboard')}}"
                            class="flex items-center p-3 bg-custom-light-purple text-custom-purple rounded-lg font-semibold">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -43,7 +42,8 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/Inventory/inventory.html" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
+                        <a href="{{url_for('inventory_page')}}"
+                           class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="sidebar-icon mr-3">
@@ -55,7 +55,8 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/Billing/billing.html" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
+                        <a href="{{url_for('billing_page')}}"
+                           class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="sidebar-icon mr-3">
@@ -66,7 +67,7 @@
                         </a>
                     </li>
                     <li class="mb-2">
-                        <a href="/Reports/report.html" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
+                        <a href="{{url_for('reports_hub')}}" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="sidebar-icon mr-3">
@@ -78,7 +79,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/About/about.html" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
+                        <a href="{{url_for('about')}}" class="flex items-center p-3 hover:bg-gray-100 rounded-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                  stroke-linejoin="round" class="sidebar-icon mr-3">
